@@ -10,8 +10,9 @@ import (
 
 type Store struct {
 	db      *sqlx.DB
-	article storage.ArticleRepoI
-	author  storage.AuthorRepoI
+	// article storage.ArticleRepoI
+	// author  storage.AuthorRepoI
+	user storage.UserRepoI
 }
 
 func NewPostgres(psqlConnString string) storage.StorageI {
@@ -25,16 +26,16 @@ func NewPostgres(psqlConnString string) storage.StorageI {
 	}
 }
 
-func (s *Store) Article() storage.ArticleRepoI {
-	if s.article == nil {
-		s.article = &articleRepo{db: s.db}
+func (s *Store) User() storage.UserRepoI {
+	if s.user == nil {
+		s.user = &userRepo{db: s.db}
 	}
-	return s.article
+	return s.user
 }
 
-func (s *Store) Author() storage.AuthorRepoI {
-	if s.author == nil {
-		s.author = &authorRepo{db: s.db}
-	}
-	return s.author
-}
+// func (s *Store) Author() storage.AuthorRepoI {
+// 	if s.author == nil {
+// 		s.author = &authorRepo{db: s.db}
+// 	}
+// 	return s.author
+// }
