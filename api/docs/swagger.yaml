@@ -1,0 +1,129 @@
+definitions:
+  models.ArticleCreateModel:
+    properties:
+      author_id:
+        type: string
+      body:
+        type: string
+      title:
+        type: string
+    type: object
+  models.ArticleListItem:
+    properties:
+      author:
+        allOf:
+        - $ref: '#/definitions/models.Person'
+        description: Nested structs
+      body:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.DefaultError:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Person:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      firstname:
+        type: string
+      id:
+        type: string
+      lastname:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.SuccessResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample article demo.
+  termsOfService: https://udevs.io
+paths:
+  /articles:
+    get:
+      consumes:
+      - application/json
+      description: jimgina yaxshilab ishlat, yaxshi bola bol
+      operationId: get-all-handler
+      parameters:
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: search string
+        in: query
+        name: search
+        type: string
+      - description: something
+        in: query
+        name: something
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ArticleListItem'
+            type: array
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.DefaultError'
+      summary: List articles
+      tags:
+      - articles
+    post:
+      consumes:
+      - application/json
+      description: Create Article By Given Info and Author ID
+      operationId: create-article-handler
+      parameters:
+      - description: Article Body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.ArticleCreateModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/models.SuccessResponse'
+            - properties:
+                data:
+                  type: string
+              type: object
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.DefaultError'
+      summary: Create Article
+      tags:
+      - article
+swagger: "2.0"
