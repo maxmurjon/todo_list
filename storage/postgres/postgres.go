@@ -1,8 +1,8 @@
 package postgres
 
 import (
-	"bootcamp/article/storage"
 	"log"
+	"todo/storage"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -38,4 +38,3 @@ func (s *Store) Author() storage.AuthorRepoI {
 	}
 	return s.author
 }
-

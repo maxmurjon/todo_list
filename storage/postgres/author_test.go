@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"bootcamp/article/models"
 	"database/sql/driver"
 	"testing"
 	"time"
+	"todo/models"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/jmoiron/sqlx"

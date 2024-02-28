@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bootcamp/article/api"
-	"bootcamp/article/config"
-	"bootcamp/article/storage/postgres"
 	"fmt"
+	"todo/api"
+	"todo/config"
+	"todo/storage/postgres"
 
-	"bootcamp/article/api/handlers"
+	"todo/api/handlers"
 
 	"github.com/gin-gonic/gin"
 )

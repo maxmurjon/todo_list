@@ -1,4 +1,4 @@
-module bootcamp/article
+module todo
 
 go 1.19
 

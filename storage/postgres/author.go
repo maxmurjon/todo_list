@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"bootcamp/article/models"
-	"bootcamp/article/storage"
 	"database/sql"
 	"errors"
+	"todo/models"
+	"todo/storage"
 
 	"github.com/jmoiron/sqlx"
 )

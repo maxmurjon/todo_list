@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"bootcamp/article/models"
 	"fmt"
 	"net/http"
+	"todo/models"
 
 	"github.com/gin-gonic/gin"
 )

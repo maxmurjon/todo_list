@@ -1,10 +1,10 @@
 package postgres
 
 import (
-	"bootcamp/article/models"
-	"bootcamp/article/storage"
 	"database/sql"
 	"errors"
+	"todo/models"
+	"todo/storage"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -41,16 +41,15 @@ func (r articleRepo) Create(entity models.ArticleCreateModel) (err error) {
 
 func (r articleRepo) GetList(query models.Query) (resp []models.ArticleListItem, err error) {
 	var rows *sql.Rows
-		rows, err = r.db.Query(
-			`SELECT
+	rows, err = r.db.Query(
+		`SELECT
 			ar.id, ar.title, ar.body, ar.created_at, ar.updated_at,
 			au.id, au.firstname, au.lastname, au.created_at, au.updated_at
 			FROM article AS ar JOIN author AS au ON ar.author_id = au.id
 			OFFSET $1 LIMIT $2`,
-			query.Offset,
-			query.Limit,
-		)
-	
+		query.Offset,
+		query.Limit,
+	)
 
 	if err != nil {
 		return resp, err
@@ -73,7 +72,7 @@ func (r articleRepo) GetList(query models.Query) (resp []models.ArticleListItem,
 }
 
 func (r articleRepo) GetByID(ID string) (resp models.Article, err error) {
-	
+
 	var rows *sql.Rows
 	rows, err = r.db.Query(
 		`SELECT id, title, body, created_at, updated_at from article where id = $1
@@ -92,7 +91,7 @@ func (r articleRepo) GetByID(ID string) (resp models.Article, err error) {
 			&a.ID, &a.Title, &a.Body, &a.CreatedAt, &a.UpdatedAt,
 		)
 		resp = a
-		if err != nil{
+		if err != nil {
 			return resp, err
 		}
 	}
@@ -100,32 +99,31 @@ func (r articleRepo) GetByID(ID string) (resp models.Article, err error) {
 	return resp, err
 }
 
-func (r articleRepo) Update(entity models.ArticleUpdateModel) ( int64, error) {
-		query := `UPDATE article
+func (r articleRepo) Update(entity models.ArticleUpdateModel) (int64, error) {
+	query := `UPDATE article
 		SET title = $2, body = $3
 		WHERE id = $1
 		`
-	
-		 res, err := r.db.Exec(query,
-			entity.ID,
-			entity.Title,
-			entity.Body,
+
+	res, err := r.db.Exec(query,
+		entity.ID,
+		entity.Title,
+		entity.Body,
 	)
 	if err != nil {
-		return 0,err
+		return 0, err
 	}
 	n, err := res.RowsAffected()
-	
-	if err!= nil {
-		return 0,err
+
+	if err != nil {
+		return 0, err
 	}
-	if n>0{
-		return 0,nil
+	if n > 0 {
+		return 0, nil
 	}
-	return n,errors.New("article not updated")
+	return n, errors.New("article not updated")
 
 }
-
 
 func (r articleRepo) Delete(ID string) (effectedRowsNum int, err error) {
 
@@ -135,6 +133,6 @@ func (r articleRepo) Delete(ID string) (effectedRowsNum int, err error) {
 		ID,
 	)
 
-	return 0,err
+	return 0, err
 
 }

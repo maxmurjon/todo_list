@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"bootcamp/article/models"
 	"fmt"
 	"net/http"
+	"todo/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,7 +46,7 @@ func (h *Handler) UpdateAuthor(c *gin.Context) {
 
 	fmt.Println(entity)
 
-	 err = h.strg.Author().Update(entity)
+	err = h.strg.Author().Update(entity)
 
 	if err != nil {
 		c.JSON(400, models.DefaultError{
@@ -90,12 +90,12 @@ func (h *Handler) GetAuthorsByIDHandler(c *gin.Context) {
 
 	id := c.Param("id")
 	author, err := h.strg.Author().GetByID(id)
-	if err!= nil {
-        c.JSON(400, models.DefaultError{
-            Message: err.Error(),
-        })
+	if err != nil {
+		c.JSON(400, models.DefaultError{
+			Message: err.Error(),
+		})
 		return
-    }
+	}
 	c.JSON(http.StatusOK, models.SuccessResponse{
 		Message: "OK",
 		Data:    author,
@@ -106,15 +106,14 @@ func (h *Handler) DeleteAuthor(c *gin.Context) {
 
 	id := c.Param("id")
 	author, err := h.strg.Author().Delete(id)
-	if err!= nil {
-        c.JSON(400, models.DefaultError{
-            Message: err.Error(),
-        })
+	if err != nil {
+		c.JSON(400, models.DefaultError{
+			Message: err.Error(),
+		})
 		return
-    }
+	}
 	c.JSON(http.StatusOK, models.SuccessResponse{
 		Message: "OK",
 		Data:    author,
 	})
 }
-

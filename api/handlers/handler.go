@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"bootcamp/article/config"
-	"bootcamp/article/storage"
 	"strconv"
+	"todo/config"
+	"todo/storage"
 
 	"github.com/gin-gonic/gin"
 )

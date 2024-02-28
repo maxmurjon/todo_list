@@ -1,14 +1,14 @@
 package api
 
 import (
-	"bootcamp/article/api/docs"
-	_ "bootcamp/article/api/docs"
-	"bootcamp/article/api/handlers"
-	"bootcamp/article/config"
+	"todo/api/docs"
+	_ "todo/api/docs"
+	"todo/api/handlers"
+	"todo/config"
 
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/files"       // swagger embed files
-	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 // @description This is a sample article demo.

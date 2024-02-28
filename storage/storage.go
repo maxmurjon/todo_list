@@ -1,10 +1,12 @@
 package storage
 
-import "bootcamp/article/models"
+import "todo/models"
 
 type StorageI interface {
 	Article() ArticleRepoI
 	Author() AuthorRepoI
+	Users() UserRepoI
+	Todo() 
 }
 
 type ArticleRepoI interface {
@@ -27,3 +29,29 @@ type AuthorRepoI interface {
 
 // reports for the storage layer for the who most  more posted articles
 // reports for the storage layer for the who most few posted articles
+
+
+type UserRepoI interface {
+	Create(entity models.UserCreateModel) (err error)
+	GetList(query models.Query) (resp []models.UserListItem, err error)
+	GetByID(ID string) (resp models.User, err error)
+	Update(entity models.UserUpdateModel) (int64, error)
+	Delete(ID string) (effectedRowsNum int, err error)
+}
+
+
+type TodoRepoI interface {
+	Create(entity models.ArticleCreateModel) (err error)
+	GetList(query models.Query) (resp []models.ArticleListItem, err error)
+	GetByID(ID string) (resp models.Article, err error)
+	Update(entity models.ArticleUpdateModel) (int64, error)
+	Delete(ID string) (effectedRowsNum int, err error)
+}
+
+type StatusRepoI interface {
+	Create(entity models.ArticleCreateModel) (err error)
+	GetList(query models.Query) (resp []models.ArticleListItem, err error)
+	GetByID(ID string) (resp models.Article, err error)
+	Update(entity models.ArticleUpdateModel) (int64, error)
+	Delete(ID string) (effectedRowsNum int, err error)
+}

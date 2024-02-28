@@ -1,9 +1,9 @@
 package postgres
 
 import (
-	"bootcamp/article/models"
 	"reflect"
 	"testing"
+	"todo/models"
 
 	"github.com/jmoiron/sqlx"
 )
