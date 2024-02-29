@@ -14,6 +14,7 @@ import (
 func main() {
 	cfg := config.Load()
 
+	fmt.Println("hello")
 	pgStore := postgres.NewPostgres(fmt.Sprintf(
 		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		cfg.PostgresHost,
@@ -22,7 +23,6 @@ func main() {
 		cfg.PostgresPassword,
 		cfg.PostgresDatabase,
 	))
-
 	h := handlers.NewHandler(pgStore, cfg)
 
 	switch cfg.Environment {

@@ -3,8 +3,11 @@ package postgres
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"todo/models"
 	"todo/storage"
+
+	"github.com/google/uuid"
 
 	"github.com/jmoiron/sqlx"
 )
@@ -19,8 +22,9 @@ func NewUserRepo(db *sqlx.DB) storage.UserRepoI {
 	}
 }
 
-func (r userRepo) Create(entity models.UserCreateModel) (err error) {
-	insertQuery := `INSERT INTO author (
+func (r userRepo) Create(entity models.UserCreateModel) (string, error) {
+	insertQuery := `INSERT INTO users (
+		id,
 		full_name,
 		user_name,
 		email,
@@ -29,59 +33,33 @@ func (r userRepo) Create(entity models.UserCreateModel) (err error) {
 		$1,
 		$2,
 		$3,
-		$4
+		$4,
+		$5
 	)`
 
-	_, err = r.db.Exec(insertQuery,
+	uuid := uuid.New()
+	_, err := r.db.Exec(insertQuery,
+		uuid,
 		entity.FullName,
 		entity.UserName,
 		entity.Email,
 		entity.UserPassword,
 	)
-
-	return err
+	fmt.Println("hello world", err, "message")
+	return uuid.String(), err
 }
 
-// func (r userRepo) GetList(query models.Query) (resp []models.Person, err error) {
+func (r userRepo) GetList(query models.Query) (resp []models.UserListItem, err error) {
 
-// 	var rows *sql.Rows
-// 	rows, err = r.db.Query(
-// 		`SELECT
-// 			author.id, author.firstname, author.lastname, author.created_at, author.updated_at 
-// 			FROM author 
-// 			OFFSET $1 LIMIT $2`,
-// 		query.Offset,
-// 		query.Limit,
-// 	)
-
-// 	if err != nil {
-// 		return resp, err
-// 	}
-
-// 	defer rows.Close()
-// 	for rows.Next() {
-// 		var a models.Person
-// 		err = rows.Scan(
-// 			&a.ID, &a.Firstname, &a.Lastname, &a.CreatedAt, &a.UpdatedAt,
-// 		)
-// 		resp = append(resp, a)
-// 		if err != nil {
-// 			return resp, err
-// 		}
-// 	}
-
-// 	return resp, err
-// }
-
-func (r userRepo) GetByID(ID string) (resp models.User, err error) {
 	var rows *sql.Rows
 	rows, err = r.db.Query(
 		`SELECT id, full_name,
 		user_name,
 		email,
-		user_password from users where id = $1
-		`,
-		ID,
+		user_password from users
+				OFFSET $1 LIMIT $2`,
+		query.Offset,
+		query.Limit,
 	)
 
 	if err != nil {
@@ -90,11 +68,11 @@ func (r userRepo) GetByID(ID string) (resp models.User, err error) {
 
 	defer rows.Close()
 	for rows.Next() {
-		var a models.User
+		var a models.UserListItem
 		err = rows.Scan(
 			&a.Id, &a.FullName, &a.UserName, &a.Email, &a.UserPassword,
 		)
-		resp = a
+		resp = append(resp, a)
 		if err != nil {
 			return resp, err
 		}
@@ -103,9 +81,27 @@ func (r userRepo) GetByID(ID string) (resp models.User, err error) {
 	return resp, err
 }
 
+func (r userRepo) GetByID(ID string) (models.User, error) {
+	var resp models.User
+	err := r.db.QueryRow(
+		`SELECT id, full_name,
+		user_name,
+		email,
+		user_password from users where id = $1
+		`,
+		ID,
+	).Scan(&resp.Id, &resp.FullName, &resp.UserName, &resp.Email, &resp.UserPassword)
+
+	if err != nil {
+		return resp, err
+	}
+
+	return resp, err
+}
+
 func (r userRepo) Update(entity models.UserUpdateModel) error {
 
-	query := `UPDATE author
+	query := `UPDATE users
 	SET full_name=$2,
 	user_name=$3,
 	email=$4,
@@ -120,6 +116,7 @@ func (r userRepo) Update(entity models.UserUpdateModel) error {
 		entity.Email,
 		entity.UserPassword,
 	)
+	fmt.Println("hello", err)
 	if err != nil {
 		return err
 	}
@@ -135,7 +132,7 @@ func (r userRepo) Update(entity models.UserUpdateModel) error {
 }
 
 func (r userRepo) Delete(ID string) (effectedRowsNum int, err error) {
-	insertQuery := `DELETE from user where id = $1`
+	insertQuery := `DELETE from users where id = $1`
 
 	_, err = r.db.Exec(insertQuery,
 		ID,

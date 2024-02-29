@@ -1,12 +1,7 @@
--- statuslar jadvali
-CREATE TABLE status (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) UNIQUE
-);
 
 -- foydalanuvchilar jadvali
 CREATE TABLE users (
-    id VARCHAR(34) PRIMARY KEY,
+    id VARCHAR(50) PRIMARY KEY,
     full_name VARCHAR(150),
     email VARCHAR(100),
     user_name VARCHAR(100) UNIQUE,
@@ -15,8 +10,8 @@ CREATE TABLE users (
 
 -- todo (vazifa) jadvali
 CREATE TABLE todo (
-    id VARCHAR(34) PRIMARY KEY,
+    id VARCHAR(50) PRIMARY KEY,
     title VARCHAR(100),
-    status_id INTEGER REFERENCES status(id),
-    user_id VARCHAR(34) REFERENCES users(id)
+    status VARCHAR(50),
+    user_id VARCHAR(50) REFERENCES users(id)
 );

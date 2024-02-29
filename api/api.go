@@ -7,8 +7,8 @@ import (
 	"todo/config"
 
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"     // swagger embed files
-	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+	// swagger embed files
+	// gin-swagger middleware
 )
 
 // @description This is a sample article demo.
@@ -19,16 +19,17 @@ func SetUpAPI(r *gin.Engine, h handlers.Handler, cfg config.Config) {
 	docs.SwaggerInfo.Host = cfg.ServiceHost + cfg.HTTPPort
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	r.POST("/createarticle", h.CreateArticle)
-	r.POST("/createauthor", h.CreateAuthor)
-	r.GET("/articlelist", h.GetArticleList)
-	r.GET("/authorlist", h.GetAuthorsList)
-	r.GET("/authors/:id", h.GetAuthorsByIDHandler)
-	r.GET("/articles/:id", h.GetArticleByIDHandler)
-	r.DELETE("/deleteauthor/:id", h.DeleteAuthor)
-	r.DELETE("/deletearticle/:id", h.DeleteArticle)
-	r.PUT("/updateauthor/", h.UpdateAuthor)
-	r.PUT("/updatearticle/", h.UpdateArticle)
+	r.PUT("/updateuser/", h.UpdateUser)
+	r.POST("/createuser", h.CreateUser)
+	r.GET("/userlist", h.GetUsersList)
+	r.GET("/users/:id", h.GetUsersByIDHandler)
+	r.DELETE("/deleteuser/:id", h.DeleteUser)
+	
+	r.GET("/todolist", h.GetTodoList)
+	r.GET("/todos/:id", h.GetTodoByIDHandler)
+	r.DELETE("/deletetodo/:id", h.DeleteTodo)
+	r.POST("/createtodo", h.CreateTodo)
+	r.PUT("/updatetodo/", h.UpdateTodo)
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
