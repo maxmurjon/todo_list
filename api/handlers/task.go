@@ -19,8 +19,8 @@ import (
 // @Success 200 {object} models.SuccessResponse{data=string}
 // @Failure default {object} models.DefaultError
 // @Router /articles [POST]
-func (h *Handler) CreateTodo(c *gin.Context) {
-	var entity models.TodoCreateModel
+func (h *Handler) CreateTask(c *gin.Context) {
+	var entity models.TaskCreateModel
 
 	err := c.BindJSON(&entity)
 	if err != nil {
@@ -32,7 +32,7 @@ func (h *Handler) CreateTodo(c *gin.Context) {
 
 	fmt.Println(entity)
 
-	uuid, err := h.strg.Todo().Create(entity)
+	uuid, err := h.strg.Task().Create(entity)
 	if err != nil {
 		c.JSON(400, models.DefaultError{
 			Message: err.Error(),
@@ -41,7 +41,7 @@ func (h *Handler) CreateTodo(c *gin.Context) {
 
 	fmt.Println(err)
 
-	resp, err := h.strg.Todo().GetByID(uuid)
+	resp, err := h.strg.Task().GetByID(uuid)
 	if err != nil {
 		c.JSON(400, models.DefaultError{
 			Message: err.Error(),
@@ -68,7 +68,7 @@ func (h *Handler) CreateTodo(c *gin.Context) {
 // @Success 200 {array} models.TodoListItem
 // @Failure default {object} models.DefaultError
 // @Router /Todos [get]
-func (h *Handler) GetTodoList(c *gin.Context) {
+func (h *Handler) GetTaskList(c *gin.Context) {
 	offset, err := h.getOffsetParam(c)
 	if err != nil {
 		c.JSON(400, models.DefaultError{
@@ -83,7 +83,7 @@ func (h *Handler) GetTodoList(c *gin.Context) {
 		})
 	}
 
-	resp, err := h.strg.Todo().GetList(models.Query{Offset: offset, Limit: limit, Search: c.Query("search")})
+	resp, err := h.strg.Task().GetList(models.Query{Offset: offset, Limit: limit, Search: c.Query("search")})
 
 	if err != nil {
 		c.JSON(400, models.DefaultError{
@@ -94,10 +94,10 @@ func (h *Handler) GetTodoList(c *gin.Context) {
 	c.JSON(200, resp)
 }
 
-func (h *Handler) GetTodoByIDHandler(c *gin.Context) {
+func (h *Handler) GetTaskByIDHandler(c *gin.Context) {
 
 	id := c.Param("id")
-	author, err := h.strg.Todo().GetByID(id)
+	author, err := h.strg.Task().GetByID(id)
 	if err != nil {
 		c.JSON(400, models.DefaultError{
 			Message: err.Error(),
@@ -110,10 +110,10 @@ func (h *Handler) GetTodoByIDHandler(c *gin.Context) {
 	})
 }
 
-func (h *Handler) DeleteTodo(c *gin.Context) {
+func (h *Handler) DeleteTask(c *gin.Context) {
 
 	id := c.Param("id")
-	author, err := h.strg.Todo().Delete(id)
+	err:= h.strg.Task().Delete(id)
 	if err != nil {
 		c.JSON(400, models.DefaultError{
 			Message: err.Error(),
@@ -122,12 +122,11 @@ func (h *Handler) DeleteTodo(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, models.SuccessResponse{
 		Message: "OK",
-		Data:    author,
 	})
 }
 
-func (h *Handler) UpdateTodo(c *gin.Context) {
-	var entity models.TodoUpdateModel
+func (h *Handler) UpdateTask(c *gin.Context) {
+	var entity models.TaskUpdateModel
 	err := c.BindJSON(&entity)
 	if err != nil {
 		c.JSON(400, models.DefaultError{
@@ -138,7 +137,7 @@ func (h *Handler) UpdateTodo(c *gin.Context) {
 
 	fmt.Println(entity)
 
-	err = h.strg.Todo().Update(entity)
+	err = h.strg.Task().Update(entity)
 
 	if err != nil {
 		c.JSON(400, models.DefaultError{

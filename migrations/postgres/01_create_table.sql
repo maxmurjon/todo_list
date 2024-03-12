@@ -1,17 +1,40 @@
-
--- foydalanuvchilar jadvali
+-- users jadvali
 CREATE TABLE users (
-    id VARCHAR(50) PRIMARY KEY,
-    full_name VARCHAR(150),
-    email VARCHAR(100),
-    user_name VARCHAR(100) UNIQUE,
-    user_password VARCHAR(100)
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    full_name VARCHAR(255) NOT NULL,
+    user_name VARCHAR(100) NOT NULL,
+    user_password VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL
 );
 
--- todo (vazifa) jadvali
-CREATE TABLE todo (
-    id VARCHAR(50) PRIMARY KEY,
-    title VARCHAR(100),
+-- tasks jadvali
+CREATE TABLE tasks (
+    task_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    due_date TIMESTAMP,
     status VARCHAR(50),
-    user_id VARCHAR(50) REFERENCES users(id)
+    user_id UUID REFERENCES users(id)
+);
+
+-- comments jadvali
+CREATE TABLE comments (
+    comment_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    task_id UUID REFERENCES tasks(task_id),
+    user_id UUID REFERENCES users(id),
+    text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- user_roles jadvali
+CREATE TABLE user_roles (
+    role_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    role_name VARCHAR(100) NOT NULL
+);
+
+-- user_roles_users bog'lovchi jadvali
+CREATE TABLE user_roles_users (
+    user_id UUID REFERENCES users(id),
+    role_id UUID REFERENCES user_roles(role_id),
+    PRIMARY KEY (user_id, role_id)
 );

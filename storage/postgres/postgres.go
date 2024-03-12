@@ -11,7 +11,9 @@ import (
 type Store struct {
 	db     *sqlx.DB
 	user   storage.UserRepoI
-	todo   storage.TodoRepoI
+	task   storage.TaskRepoI
+	userRole storage.UserRoleRepoI
+	comment storage.CommentRepoI
 }
 
 func NewPostgres(psqlConnString string) storage.StorageI {
@@ -32,9 +34,23 @@ func (s *Store) User() storage.UserRepoI {
 	return s.user
 }
 
-func (s *Store) Todo() storage.TodoRepoI {
-	if s.todo == nil {
-		s.todo = &todoRepo{db: s.db}
+func (s *Store) Task() storage.TaskRepoI {
+	if s.task == nil {
+		s.task = &todoRepo{db: s.db}
 	}
-	return s.todo
+	return s.task
+}
+
+func (s *Store) UserRole() storage.UserRoleRepoI {
+	if s.userRole == nil {
+		s.userRole = &userRoleRepo{db: s.db}
+	}
+	return s.userRole
+}
+
+func (s *Store) Comment() storage.CommentRepoI {
+	if s.comment == nil {
+		s.comment = &commentRepo{db: s.db}
+	}
+	return s.comment
 }
